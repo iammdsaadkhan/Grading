@@ -1,288 +1,135 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>IITM Dashboard</title>
-
-<style>
-/* 1. COLOR VARIABLES (Dark Mode is now DEFAULT) */
-:root {
-  --bg-overlay: rgba(0, 0, 0, 0.6); /* Darkens the video */
-  --card-bg: rgba(15, 23, 42, 0.75); /* Glass effect dark */
-  --text: #e5e7eb;
-  --text-muted: #94a3b8;
-  --btn: #38bdf8;
-  --highlight: rgba(30, 41, 59, 0.7);
-  --input-bg: rgba(0, 0, 0, 0.3);
-  --border: rgba(255, 255, 255, 0.1);
-}
-
-/* Light Mode Overrides */
-body.light {
-  --bg-overlay: rgba(255, 255, 255, 0.4);
-  --card-bg: rgba(255, 255, 255, 0.85);
-  --text: #0f172a;
-  --text-muted: #475569;
-  --btn: #2563eb;
-  --highlight: rgba(241, 245, 249, 0.8);
-  --input-bg: #ffffff;
-  --border: #cbd5e1;
-}
-
-/* 2. BACKGROUND VIDEO STYLES */
-#bg-video {
-  position: fixed;
-  right: 0;
-  bottom: 0;
-  min-width: 100%;
-  min-height: 100%;
-  z-index: -2;
-  object-fit: cover;
-}
-
-.overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: var(--bg-overlay);
-  z-index: -1;
-  backdrop-filter: blur(3px); /* Optional: Blurs the video slightly */
-  transition: background 0.3s ease;
-}
-
-/* 3. GENERAL STYLES */
-body {
-  margin: 0;
-  padding: 20px;
-  color: var(--text);
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  min-height: 100vh;
-  box-sizing: border-box;
-}
-
-.card {
-  max-width: 500px;
-  margin: 40px auto;
-  background: var(--card-bg);
-  padding: 30px;
-  border-radius: 16px;
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid var(--border);
-  transition: background 0.3s ease, color 0.3s ease;
-}
-
-/* SLIDER TOGGLE SWITCH */
-.header-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-}
-.switch {
-  position: relative;
-  display: inline-block;
-  width: 50px;
-  height: 24px;
-}
-.switch input { opacity: 0; width: 0; height: 0; }
-.slider {
-  position: absolute;
-  cursor: pointer;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background-color: #ccc;
-  transition: .4s;
-  border-radius: 34px;
-}
-.slider:before {
-  position: absolute;
-  content: "";
-  height: 16px;
-  width: 16px;
-  left: 4px;
-  bottom: 4px;
-  background-color: white;
-  transition: .4s;
-  border-radius: 50%;
-}
-input:checked + .slider { background-color: var(--btn); }
-input:checked + .slider:before { transform: translateX(26px); }
-
-/* INPUTS & BUTTONS */
-input, select {
-  width: 100%;
-  padding: 12px;
-  margin: 8px 0;
-  border-radius: 8px;
-  border: 1px solid var(--border);
-  background: var(--input-bg);
-  color: var(--text);
-  box-sizing: border-box;
-  font-size: 1rem;
-}
-input::placeholder { color: var(--text-muted); }
-
-button {
-  background: var(--btn);
-  color: white;
-  border: none;
-  padding: 12px;
-  border-radius: 8px;
-  cursor: pointer;
-  width: 100%;
-  font-size: 1rem;
-  font-weight: bold;
-  margin-top: 10px;
-  transition: opacity 0.2s;
-}
-button:hover { opacity: 0.9; }
-
-/* CLOCK & TEXT */
-.clock { text-align: center; margin-bottom: 25px; }
-.time { font-size: 3.5rem; font-weight: 700; letter-spacing: 2px; line-height: 1; }
-.date { font-size: 1.1rem; color: var(--text-muted); margin-top: 5px; }
-
-h3 { text-align: center; margin-bottom: 15px; font-weight: 600; }
-hr { border: 0; border-top: 1px solid var(--border); margin: 30px 0; }
-
-.exam-row {
-  display: flex;
-  justify-content: space-between;
-  background: var(--highlight);
-  padding: 14px;
-  border-radius: 10px;
-  margin-top: 10px;
-  font-size: 0.95rem;
-}
-.exam-date { font-weight: bold; color: var(--btn); }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IITM Dashboard</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-<video id="bg-video" autoplay loop muted playsinline>
-  <source src="https://videos.pexels.com/video-files/3129671/3129671-uhd_2560_1440_30fps.mp4" type="video/mp4">
-</video>
-<div class="overlay"></div>
+    <video id="bg-video" autoplay loop muted playsinline>
+        <source src="video/background.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+    
+    <div class="overlay"></div>
 
-<div class="card">
+    <div class="card">
 
-  <div class="header-row">
-    <div style="font-size:0.9rem; opacity:0.7">IITM Student Dashboard</div>
-    <label class="switch">
-      <input type="checkbox" id="themeToggle" onclick="toggleTheme()">
-      <span class="slider"></span>
-    </label>
-  </div>
+        <div class="header-row">
+            <div style="font-size:0.9rem; opacity:0.7">IITM Student Dashboard</div>
+            <label class="switch">
+                <input type="checkbox" id="themeToggle" onclick="toggleTheme()">
+                <span class="slider"></span>
+            </label>
+        </div>
 
-  <div class="clock">
-    <div class="time" id="clockTime">--:--</div>
-    <div class="date" id="clockDate">---</div>
-  </div>
+        <div class="clock">
+            <div class="time" id="clockTime">--:--</div>
+            <div class="date" id="clockDate">---</div>
+        </div>
 
-  <h3>Score Calculator</h3>
-  <input type="number" id="gaa" placeholder="GAA (Assignment Avg)">
-  <input type="number" id="q1" placeholder="Quiz 1 Score">
-  <input type="number" id="q2" placeholder="Quiz 2 Score">
-  <input type="number" id="et" placeholder="End Term Score">
-  
-  <button onclick="calculate()">Calculate Grade</button>
-  <div id="result" style="text-align:center; margin-top:20px;"></div>
+        <h3>Score Calculator</h3>
+        <input type="number" id="gaa" placeholder="GAA (Assignment Avg)">
+        <input type="number" id="q1" placeholder="Quiz 1 Score">
+        <input type="number" id="q2" placeholder="Quiz 2 Score">
+        <input type="number" id="et" placeholder="End Term Score">
+        
+        <button onclick="calculate()">Calculate Grade</button>
+        <div id="result" style="text-align:center; margin-top:20px;"></div>
 
-  <hr>
+        <hr>
 
-  <h3>Exam Schedule</h3>
-  <select id="term" onchange="updateDates()">
-    <option value="">-- Select Term --</option>
-    <option value="jan2026">Jan 2026</option>
-    <option value="may2026">May 2026</option>
-    <option value="sep2026">Sep 2026</option>
-    <option value="jan2027">Jan 2027</option>
-    <option value="may2027">May 2027</option>
-    <option value="sep2027">Sep 2027</option>
-    <option value="jan2028">Jan 2028</option>
-    <option value="may2028">May 2028</option>
-    <option value="sep2028">Sep 2028</option>
-    <option value="jan2029">Jan 2029</option>
-    <option value="may2029">May 2029</option>
-    <option value="sep2029">Sep 2029</option>
-    <option value="jan2030">Jan 2030</option>
-    <option value="may2030">May 2030</option>
-    <option value="sep2030">Sep 2030</option>
-  </select>
+        <h3>Exam Schedule</h3>
+        <select id="term" onchange="updateDates()">
+            <option value="">-- Select Term --</option>
+            <option value="jan2026">Jan 2026</option>
+            <option value="may2026">May 2026</option>
+            <option value="sep2026">Sep 2026</option>
+            <option value="jan2027">Jan 2027</option>
+            <option value="may2027">May 2027</option>
+            <option value="sep2027">Sep 2027</option>
+            <option value="jan2028">Jan 2028</option>
+            <option value="may2028">May 2028</option>
+            <option value="sep2028">Sep 2028</option>
+            <option value="jan2029">Jan 2029</option>
+            <option value="may2029">May 2029</option>
+            <option value="sep2029">Sep 2029</option>
+            <option value="jan2030">Jan 2030</option>
+            <option value="may2030">May 2030</option>
+            <option value="sep2030">Sep 2030</option>
+        </select>
 
-  <div class="exam-row"><span>Quiz 1</span> <span class="exam-date" id="dq1">--</span></div>
-  <div class="exam-row"><span>Quiz 2</span> <span class="exam-date" id="dq2">--</span></div>
-  <div class="exam-row"><span>End Term</span> <span class="exam-date" id="det">--</span></div>
+        <div class="exam-row"><span>Quiz 1</span> <span class="exam-date" id="dq1">--</span></div>
+        <div class="exam-row"><span>Quiz 2</span> <span class="exam-date" id="dq2">--</span></div>
+        <div class="exam-row"><span>End Term</span> <span class="exam-date" id="det">--</span></div>
 
-</div>
+    </div>
 
-<script>
-/* THEME TOGGLE */
-function toggleTheme() {
-  document.body.classList.toggle("light");
-}
+    <script>
+        /* THEME TOGGLE */
+        function toggleTheme() {
+            document.body.classList.toggle("light");
+        }
 
-/* CLOCK */
-function updateClock() {
-  const now = new Date();
-  clockTime.innerText = now.toLocaleTimeString("en-GB");
-  clockDate.innerText = now.toLocaleDateString("en-GB", { weekday: "long", day: "numeric", month: "short", year: "numeric" });
-}
-setInterval(updateClock, 1000);
-updateClock();
+        /* CLOCK */
+        function updateClock() {
+            const now = new Date();
+            clockTime.innerText = now.toLocaleTimeString("en-GB");
+            clockDate.innerText = now.toLocaleDateString("en-GB", { weekday: "long", day: "numeric", month: "short", year: "numeric" });
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
 
-/* CALCULATOR */
-function calculate() {
-  const gaa = +document.getElementById("gaa").value || 0;
-  const q1  = +document.getElementById("q1").value || 0;
-  const q2  = +document.getElementById("q2").value || 0;
-  const et  = +document.getElementById("et").value || 0;
+        /* CALCULATOR */
+        function calculate() {
+            const gaa = +document.getElementById("gaa").value || 0;
+            const q1  = +document.getElementById("q1").value || 0;
+            const q2  = +document.getElementById("q2").value || 0;
+            const et  = +document.getElementById("et").value || 0;
 
-  const opt1 = 0.6*et + 0.2*Math.max(q1, q2);
-  const opt2 = 0.4*et + 0.2*q1 + 0.3*q2;
-  let T = 0.1*gaa + Math.max(opt1, opt2) + 2;
-  if(T > 100) T = 100;
+            const opt1 = 0.6*et + 0.2*Math.max(q1, q2);
+            const opt2 = 0.4*et + 0.2*q1 + 0.3*q2;
+            let T = 0.1*gaa + Math.max(opt1, opt2) + 2;
+            if(T > 100) T = 100;
 
-  let grade="U", gp=0;
-  if (T>=90){grade="S";gp=10}
-  else if (T>=80){grade="A";gp=9}
-  else if (T>=70){grade="B";gp=8}
-  else if (T>=60){grade="C";gp=7}
-  else if (T>=50){grade="D";gp=6}
-  else if (T>=40){grade="E";gp=4}
+            let grade="U", gp=0;
+            if (T>=90){grade="S";gp=10}
+            else if (T>=80){grade="A";gp=9}
+            else if (T>=70){grade="B";gp=8}
+            else if (T>=60){grade="C";gp=7}
+            else if (T>=50){grade="D";gp=6}
+            else if (T>=40){grade="E";gp=4}
 
-  result.innerHTML = `Score: <b style="font-size:1.2rem">${T.toFixed(2)}</b> &nbsp;|&nbsp; Grade: <b style="color:var(--btn); font-size:1.2rem">${grade}</b> (${gp})`;
-}
+            result.innerHTML = `Score: <b style="font-size:1.2rem">${T.toFixed(2)}</b> &nbsp;|&nbsp; Grade: <b style="color:var(--btn); font-size:1.2rem">${grade}</b> (${gp})`;
+        }
 
-/* DATES DATABASE */
-const terms = {
-  jan2026: { q1: "Sun, 15 Mar 2026", q2: "Sun, 12 Apr 2026", et: "Sun, 10 May 2026" },
-  may2026: { q1: "Sun, 19 Jul 2026", q2: "Sun, 16 Aug 2026", et: "Sun, 13 Sep 2026" },
-  sep2026: { q1: "Sun, 15 Nov 2026", q2: "Sat, 05 Dec 2026", et: "Sun, 10 Jan 2027" },
-  jan2027: { q1: "Sun, 14 Mar 2027", q2: "Sun, 11 Apr 2027", et: "Sun, 09 May 2027" },
-  may2027: { q1: "Sun, 11 Jul 2027", q2: "Sun, 22 Aug 2027", et: "Sun, 05 Sep 2027" },
-  sep2027: { q1: "Sun, 07 Nov 2027", q2: "Sun, 12 Dec 2027", et: "Sun, 09 Jan 2028" },
-  jan2028: { q1: "Sun, 12 Mar 2028", q2: "Sun, 09 Apr 2028", et: "Sun, 07 May 2028" },
-  may2028: { q1: "Sun, 16 Jul 2028", q2: "Sun, 20 Aug 2028", et: "Sun, 10 Sep 2028" },
-  sep2028: { q1: "Sun, 05 Nov 2028", q2: "Sun, 03 Dec 2028", et: "Sat, 06 Jan 2029" },
-  jan2029: { q1: "Sun, 11 Mar 2029", q2: "Sun, 15 Apr 2029", et: "Sun, 13 May 2029" },
-  may2029: { q1: "Sun, 15 Jul 2029", q2: "Sun, 26 Aug 2029", et: "Sun, 09 Sep 2029" },
-  sep2029: { q1: "Sun, 11 Nov 2029", q2: "Sun, 02 Dec 2029", et: "Sun, 06 Jan 2030" },
-  jan2030: { q1: "Sun, 10 Mar 2030", q2: "Sun, 07 Apr 2030", et: "Sun, 12 May 2030" },
-  may2030: { q1: "Sun, 14 Jul 2030", q2: "Sun, 11 Aug 2030", et: "Sun, 08 Sep 2030" },
-  sep2030: { q1: "Sun, 10 Nov 2030", q2: "Sun, 01 Dec 2030", et: "Sun, 05 Jan 2031" }
-};
+        /* DATES DATABASE */
+        const terms = {
+            jan2026: { q1: "Sun, 15 Mar 2026", q2: "Sun, 12 Apr 2026", et: "Sun, 10 May 2026" },
+            may2026: { q1: "Sun, 19 Jul 2026", q2: "Sun, 16 Aug 2026", et: "Sun, 13 Sep 2026" },
+            sep2026: { q1: "Sun, 15 Nov 2026", q2: "Sat, 05 Dec 2026", et: "Sun, 10 Jan 2027" },
+            jan2027: { q1: "Sun, 14 Mar 2027", q2: "Sun, 11 Apr 2027", et: "Sun, 09 May 2027" },
+            may2027: { q1: "Sun, 11 Jul 2027", q2: "Sun, 22 Aug 2027", et: "Sun, 05 Sep 2027" },
+            sep2027: { q1: "Sun, 07 Nov 2027", q2: "Sun, 12 Dec 2027", et: "Sun, 09 Jan 2028" },
+            jan2028: { q1: "Sun, 12 Mar 2028", q2: "Sun, 09 Apr 2028", et: "Sun, 07 May 2028" },
+            may2028: { q1: "Sun, 16 Jul 2028", q2: "Sun, 20 Aug 2028", et: "Sun, 10 Sep 2028" },
+            sep2028: { q1: "Sun, 05 Nov 2028", q2: "Sun, 03 Dec 2028", et: "Sat, 06 Jan 2029" },
+            jan2029: { q1: "Sun, 11 Mar 2029", q2: "Sun, 15 Apr 2029", et: "Sun, 13 May 2029" },
+            may2029: { q1: "Sun, 15 Jul 2029", q2: "Sun, 26 Aug 2029", et: "Sun, 09 Sep 2029" },
+            sep2029: { q1: "Sun, 11 Nov 2029", q2: "Sun, 02 Dec 2029", et: "Sun, 06 Jan 2030" },
+            jan2030: { q1: "Sun, 10 Mar 2030", q2: "Sun, 07 Apr 2030", et: "Sun, 12 May 2030" },
+            may2030: { q1: "Sun, 14 Jul 2030", q2: "Sun, 11 Aug 2030", et: "Sun, 08 Sep 2030" },
+            sep2030: { q1: "Sun, 10 Nov 2030", q2: "Sun, 01 Dec 2030", et: "Sun, 05 Jan 2031" }
+        };
 
-function updateDates() {
-  const t = terms[term.value];
-  if (!t) { dq1.innerText="--"; dq2.innerText="--"; det.innerText="--"; return; }
-  dq1.innerText = t.q1; dq2.innerText = t.q2; det.innerText = t.et;
-}
-</script>
+        function updateDates() {
+            const t = terms[term.value];
+            if (!t) { dq1.innerText="--"; dq2.innerText="--"; det.innerText="--"; return; }
+            dq1.innerText = t.q1; dq2.innerText = t.q2; det.innerText = t.et;
+        }
+    </script>
 </body>
 </html>
